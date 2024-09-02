@@ -1,4 +1,4 @@
-`toygraph` - A Go Project for Computational Graphs
+# `toygraph` - A Go Project for Computational Graphs
 
 I created toygraph as a hands-on way to better understand computational graphs and automatic differentiation. While I’m not making any speed guarantees, I’ve focused on performance where I can (e.g., reusing allocated matrices).
 
