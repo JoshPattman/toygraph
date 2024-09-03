@@ -1,8 +1,10 @@
 package toygraph
 
 import (
+	"fmt"
 	"math"
 	"testing"
+	"time"
 
 	"gonum.org/v1/gonum/mat"
 )
@@ -29,24 +31,36 @@ func TestNums(t *testing.T) {
 
 	a, x, c := 0.5, 0.7, -0.3
 
+	startTime := time.Now()
 	realEqResult := realEq(a, x, c)
+	realTime := time.Since(startTime)
+	startTime = time.Now()
 	realDiffResultA, realDiffResultX, realDiffResultC := realDiff(a, x, c)
+	realDiffTime := time.Since(startTime)
+	startTime = time.Now()
 	Set(aN.C, a)
 	Set(xN.C, x)
 	Set(cN.C, c)
 	g.AllForward()
 	graphEqResult := Get(resultN.C)
+	graphTime := time.Since(startTime)
 	if graphEqResult != realEqResult {
 		t.Fatalf("result of graph (%.4f) was not the same as real equation (%.4f)", graphEqResult, realEqResult)
 	}
+	startTime = time.Now()
 	g.AllZeroGrads()
 	SetGrad(resultN.C, 1)
 	g.AllBackward()
 	graphDiffResultA, graphDiffResultX, graphDiffResultC := GetGrad(aN.C), GetGrad(xN.C), GetGrad(cN.C)
+	graphGradTime := time.Since(startTime)
 
 	if realDiffResultA != graphDiffResultA || realDiffResultX != graphDiffResultX {
 		t.Fatalf("graph gradients (%.4f, %.4f, %.4f) did not match real gradients (%.4f, %.4f, %.4f)", graphDiffResultA, graphDiffResultX, graphDiffResultC, realDiffResultA, realDiffResultX, realDiffResultC)
 	}
+	fmt.Println("Graph time:", graphTime)
+	fmt.Println("Graph grad time:", graphGradTime)
+	fmt.Println("Real time:", realTime)
+	fmt.Println("Real grad time:", realDiffTime)
 }
 
 func TestMatMul(t *testing.T) {
