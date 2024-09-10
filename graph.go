@@ -68,3 +68,7 @@ func (g *Graph) AllZeroGrads() {
 		n.ZeroGrad()
 	}
 }
+
+func (g *Graph) Len() int {
+	return len(g.nodes)
+}
